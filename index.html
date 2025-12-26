@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -235,22 +235,15 @@
             (function frame() {
               confetti({
                 particleCount: 5,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
+                angle: 60, spread: 55, origin: { x: 0 },
                 colors: ['#ff85a2', '#ff4d6d', '#ffffff']
               });
               confetti({
                 particleCount: 5,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
+                angle: 120, spread: 55, origin: { x: 1 },
                 colors: ['#ff85a2', '#ff4d6d', '#ffffff']
               });
-
-              if (Date.now() < end) {
-                requestAnimationFrame(frame);
-              }
+              if (Date.now() < end) { requestAnimationFrame(frame); }
             }());
         }
 
@@ -277,13 +270,13 @@
             setTimeout(() => heart.remove(), 5000);
         }, 300);
 
-        // Countdown Timer (India Standard Time: Jan 1, 2026)
+        // Countdown Timer - Set for Jan 1, 2026 IST
         const target = new Date("2026-01-01T00:00:00+05:30").getTime();
         setInterval(() => {
             const now = new Date().getTime();
             const diff = target - now;
-            
             const timerEl = document.getElementById("timer");
+            
             if (diff <= 0) {
                 if (timerEl) timerEl.innerHTML = "HAPPY NEW YEAR! 🎉";
                 return;
