@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For My Kurupeyy ❤️</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --pink-light: #ffe5ec;
@@ -100,6 +101,13 @@
         .gift-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; margin-top: 15px; }
         .gift-box { background: white; padding: 25px; border-radius: 20px; cursor: pointer; font-size: 2.5rem; border: 2px solid var(--pink-light); transition: 0.3s; }
         .gift-box:hover { background: var(--pink-light); transform: translateY(-5px); }
+        
+        #lastSurpriseBtn {
+            background: #ff0054;
+            display: none; 
+            margin-top: 20px;
+            animation: beat 0.8s infinite alternate;
+        }
     </style>
 </head>
 <body>
@@ -110,7 +118,7 @@
 
     <div class="container">
         <div id="screen0" class="screen active">
-            <img src="welcome.jpg" class="cat-img" alt="Welcome Image">
+            <img src="welcome.jpg" class="cat-img">
             <h2 class="wiggle">Ready to see my surprise?</h2>
             <button onclick="showScreen(1)">YES, START ❤️</button>
         </div>
@@ -123,7 +131,7 @@
         </div>
 
         <div id="screen2" class="screen">
-            <img src="question.jpg" class="cat-img" alt="Question Image">
+            <img src="question.jpg" class="cat-img">
             <h2 class="wiggle">Hi my love!<br>can I show you something?</h2>
             <div style="display:flex;">
                 <button onclick="showScreen(4)">YES</button>
@@ -132,7 +140,7 @@
         </div>
 
         <div id="screen3" class="screen">
-            <img src="angry.jpg" class="cat-img" alt="Angry Image">
+            <img src="angry.jpg" class="cat-img">
             <h2>How dare you say no! 😤</h2>
             <button onclick="showScreen(2)">TRY AGAIN</button>
         </div>
@@ -149,15 +157,16 @@
             <h2 class="wiggle">Kurupeyy i love you di</h2>
             <p>our randamathe Varsham hehe ✨</p>
             <div class="gift-grid">
-                <div class="gift-box" onclick="showGiftPage('hug.jpg', 'A BIG VIRTUAL HUG FOR YOU!')">✉️</div>
-                <div class="gift-box" onclick="showGiftPage('flowers.jpg', 'FRESH FLOWERS FOR MY QUEEN!')">💐</div>
-                <div class="gift-box" onclick="showGiftPage('memories.jpg', 'FOR ALL OUR MEMORIES!')">📸</div>
+                <div class="gift-box" onclick="showGiftPage('hug.jpg', 'A BIG VIRTUAL HUG FOR YOU!', 'hug')">✉️</div>
+                <div class="gift-box" onclick="showGiftPage('flowers.jpg', 'FRESH FLOWERS FOR MY QUEEN!', 'flowers')">💐</div>
+                <div class="gift-box" onclick="showGiftPage('memories.jpg', 'FOR ALL OUR MEMORIES!', 'memories')">📸</div>
                 <div class="gift-box" onclick="showMusicPage()">🎵</div>
             </div>
+            <button id="lastSurpriseBtn" onclick="openFinalSurprise()">LAST SURPRISE 💝</button>
         </div>
 
         <div id="screen6" class="screen">
-            <img id="gift-image-display" src="" class="cat-img wiggle" alt="Gift Image">
+            <img id="gift-image-display" src="" class="cat-img wiggle">
             <div class="heart-beat">❤️</div>
             <h2 id="gift-message"></h2>
             <button onclick="showScreen(5)">BACK TO GIFTS</button>
@@ -172,27 +181,66 @@
             <button id="playBtn" onclick="toggleMusic()">PLAY SONG 🎧</button>
             <button onclick="showScreen(5)" style="background:#b0bec5">BACK</button>
         </div>
+
+        <div id="screen8" class="screen">
+            <img src="final.jpg" class="cat-img">
+            <div class="heart-beat">💝</div>
+            <p style="font-size: 1.1rem; padding: 15px; line-height: 1.6; font-weight: bold;">
+                "My Loveee Kurupeyy enik ninne vayankara ishtm ahn ariyaoo hehehhehe kurupey ninne kanan patum enn arinjit ente mind nelath onnu nikniladiii hehe mwahh choclate medich tharame🙈💝"
+            </p>
+            <button onclick="showScreen(5)">BACK ❤️</button>
+        </div>
     </div>
 
     <script>
         const audio = document.getElementById('mySong');
         const record = document.getElementById('recordDiv');
         const playBtn = document.getElementById('playBtn');
+        
+        let interactions = { hug: false, flowers: false, memories: false, music: false };
 
         function showScreen(num) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('screen' + num).classList.add('active');
         }
 
-        // Updated function to handle unique images
-        function showGiftPage(imgSrc, message) {
+        function showGiftPage(imgSrc, message, id) {
             document.getElementById('gift-image-display').src = imgSrc;
             document.getElementById('gift-message').innerText = message;
+            if(id) interactions[id] = true;
+            checkConditions();
             showScreen(6);
         }
 
         function showMusicPage() {
+            interactions.music = true;
+            checkConditions();
             showScreen(7);
+        }
+
+        function checkConditions() {
+            if (interactions.hug && interactions.flowers && interactions.memories && interactions.music) {
+                document.getElementById('lastSurpriseBtn').style.display = 'block';
+            }
+        }
+
+        function openFinalSurprise() {
+            showScreen(8);
+            // Confetti Blast!
+            var count = 200;
+            var defaults = { origin: { y: 0.7 } };
+
+            function fire(particleRatio, opts) {
+              confetti(Object.assign({}, defaults, opts, {
+                particleCount: Math.floor(count * particleRatio)
+              }));
+            }
+
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
         }
 
         function toggleMusic() {
