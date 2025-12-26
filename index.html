@@ -169,7 +169,7 @@
             <img id="gift-image-display" src="" class="cat-img wiggle">
             <div class="heart-beat">❤️</div>
             <h2 id="gift-message"></h2>
-            <button onclick="showScreen(5)">BACK TO GIFTS</button>
+            <button onclick="goToGifts()">BACK TO GIFTS</button>
         </div>
 
         <div id="screen7" class="screen">
@@ -179,7 +179,7 @@
             <h3 class="wiggle">"njn eplum ninteya"</h3>
             <p>I Wanna Be Yours - Arctic Monkeys 🎵</p>
             <button id="playBtn" onclick="toggleMusic()">PLAY SONG 🎧</button>
-            <button onclick="showScreen(5)" style="background:#b0bec5">BACK</button>
+            <button onclick="goToGifts()" style="background:#b0bec5">BACK</button>
         </div>
 
         <div id="screen8" class="screen">
@@ -188,7 +188,7 @@
             <p style="font-size: 1.1rem; padding: 15px; line-height: 1.6; font-weight: bold;">
                 "My Loveee Kurupeyy enik ninne vayankara ishtm ahn ariyaoo hehehhehe kurupey ninne kanan patum enn arinjit ente mind nelath onnu nikniladiii hehe mwahh choclate medich tharame🙈💝"
             </p>
-            <button onclick="showScreen(5)">BACK ❤️</button>
+            <button onclick="goToGifts()">BACK ❤️</button>
         </div>
     </div>
 
@@ -197,6 +197,7 @@
         const record = document.getElementById('recordDiv');
         const playBtn = document.getElementById('playBtn');
         
+        // Track ALL 4 interactions
         let interactions = { hug: false, flowers: false, memories: false, music: false };
 
         function showScreen(num) {
@@ -204,17 +205,21 @@
             document.getElementById('screen' + num).classList.add('active');
         }
 
+        // Dedicated function to return and check status
+        function goToGifts() {
+            checkConditions(); 
+            showScreen(5);
+        }
+
         function showGiftPage(imgSrc, message, id) {
             document.getElementById('gift-image-display').src = imgSrc;
             document.getElementById('gift-message').innerText = message;
             if(id) interactions[id] = true;
-            checkConditions();
             showScreen(6);
         }
 
         function showMusicPage() {
             interactions.music = true;
-            checkConditions();
             showScreen(7);
         }
 
@@ -226,21 +231,30 @@
 
         function openFinalSurprise() {
             showScreen(8);
-            // Confetti Blast!
-            var count = 200;
-            var defaults = { origin: { y: 0.7 } };
+            // Confetti Blast
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
 
-            function fire(particleRatio, opts) {
-              confetti(Object.assign({}, defaults, opts, {
-                particleCount: Math.floor(count * particleRatio)
-              }));
-            }
+            (function frame() {
+              confetti({
+                particleCount: 5,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 },
+                colors: ['#ff85a2', '#ff4d6d', '#ffffff']
+              });
+              confetti({
+                particleCount: 5,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 },
+                colors: ['#ff85a2', '#ff4d6d', '#ffffff']
+              });
 
-            fire(0.25, { spread: 26, startVelocity: 55 });
-            fire(0.2, { spread: 60 });
-            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-            fire(0.1, { spread: 120, startVelocity: 45 });
+              if (Date.now() < end) {
+                requestAnimationFrame(frame);
+              }
+            }());
         }
 
         function toggleMusic() {
@@ -255,6 +269,7 @@
             }
         }
 
+        // Floating Hearts
         setInterval(() => {
             const heart = document.createElement('div');
             heart.classList.add('heart-bg');
@@ -265,6 +280,7 @@
             setTimeout(() => heart.remove(), 5000);
         }, 300);
 
+        // Countdown Timer
         const target = new Date("January 1, 2026 00:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
@@ -273,7 +289,8 @@
             const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const s = Math.floor((diff % (1000 * 60)) / 1000);
-            document.getElementById("timer").innerHTML = `${d}d : ${h}h : ${m}m : ${s}s`;
+            const timerEl = document.getElementById("timer");
+            if (timerEl) timerEl.innerHTML = `${d}d : ${h}h : ${m}m : ${s}s`;
         }, 1000);
     </script>
 </body>
