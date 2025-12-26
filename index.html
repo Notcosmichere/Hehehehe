@@ -149,15 +149,15 @@
             <h2 class="wiggle">Kurupeyy i love you di</h2>
             <p>our randamathe Varsham hehe ✨</p>
             <div class="gift-grid">
-                <div class="gift-box" onclick="showGiftPage('🤗', 'A BIG VIRTUAL HUG FOR YOU!')">✉️</div>
-                <div class="gift-box" onclick="showGiftPage('💐', 'FRESH FLOWERS FOR MY QUEEN!')">💐</div>
-                <div class="gift-box" onclick="showGiftPage('📸', 'FOR ALL OUR MEMORIES!')">📸</div>
+                <div class="gift-box" onclick="showGiftPage('hug.jpg', 'A BIG VIRTUAL HUG FOR YOU!')">✉️</div>
+                <div class="gift-box" onclick="showGiftPage('flowers.jpg', 'FRESH FLOWERS FOR MY QUEEN!')">💐</div>
+                <div class="gift-box" onclick="showGiftPage('memories.jpg', 'FOR ALL OUR MEMORIES!')">📸</div>
                 <div class="gift-box" onclick="showMusicPage()">🎵</div>
             </div>
         </div>
 
         <div id="screen6" class="screen">
-            <img src="gift_reveal.jpg" class="cat-img wiggle" alt="Gift Image">
+            <img id="gift-image-display" src="" class="cat-img wiggle" alt="Gift Image">
             <div class="heart-beat">❤️</div>
             <h2 id="gift-message"></h2>
             <button onclick="showScreen(5)">BACK TO GIFTS</button>
@@ -184,7 +184,9 @@
             document.getElementById('screen' + num).classList.add('active');
         }
 
-        function showGiftPage(icon, message) {
+        // Updated function to handle unique images
+        function showGiftPage(imgSrc, message) {
+            document.getElementById('gift-image-display').src = imgSrc;
             document.getElementById('gift-message').innerText = message;
             showScreen(6);
         }
