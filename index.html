@@ -11,6 +11,7 @@
             --pink-med: #ff85a2;
             --pink-dark: #ff4d6d;
             --text-main: #800f2f;
+            --purple-special: #7b2cbf;
         }
 
         body {
@@ -24,16 +25,31 @@
             height: 100vh;
             width: 100vw;
             overflow: hidden;
+            transition: background 0.8s ease;
+        }
+
+        /* Animated Background for Special Screen */
+        .special-bg-active {
+            background: linear-gradient(45deg, #ff85a2, #7b2cbf, #ff4d6d, #222);
+            background-size: 400% 400%;
+            animation: gradientBG 8s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .heart-bg {
             position: absolute;
-            color: rgba(255, 77, 109, 0.2);
+            color: rgba(255, 77, 109, 0.4);
             font-size: 20px;
             pointer-events: none;
-            z-index: 0;
+            z-index: 1;
             animation: float 5s linear infinite;
         }
+
         @keyframes float {
             0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
             100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
@@ -107,6 +123,13 @@
             display: none; 
             margin-top: 20px;
             animation: beat 0.8s infinite alternate;
+        }
+
+        .special-btn {
+            background: var(--purple-special);
+            font-size: 0.85rem;
+            padding: 8px 20px;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -188,7 +211,17 @@
             <p style="font-size: 1.1rem; padding: 15px; line-height: 1.6; font-weight: bold;">
                 "My Loveee Kurupeyy enik ninne vayankara ishtm ahn ariyaoo hehehhehe kurupey ninne kanan patum enn arinjit ente mind nelath onnu nikniladiii hehe mwahh choclate medich tharame🙈💝"
             </p>
-            <button onclick="goToGifts()">BACK ❤️</button>
+            <div style="display: flex; flex-direction: column; width: 100%; align-items: center;">
+                <button onclick="goToGifts()">BACK ❤️</button>
+                <button class="special-btn" onclick="openSpecialPage()">SPECIAL ✨</button>
+            </div>
+        </div>
+
+        <div id="screen9" class="screen">
+            <h2 class="wiggle" style="color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.5);">My Whole Heart...</h2>
+            <img src="special.jpg" class="cat-img" style="width: 100%; max-height: 280px; object-fit: contain; border: 5px solid white; box-shadow: 0 0 20px white;">
+            <p style="font-style: italic; color: white; font-weight: bold; font-size: 1.2rem;">"I just wanna be yours."</p>
+            <button onclick="closeSpecialPage()" style="background:rgba(255,255,255,0.8); color: var(--purple-special);">BACK</button>
         </div>
     </div>
 
@@ -196,12 +229,54 @@
         const audio = document.getElementById('mySong');
         const record = document.getElementById('recordDiv');
         const playBtn = document.getElementById('playBtn');
+        let heartInterval;
         
         let interactions = { hug: false, flowers: false, memories: false, music: false };
 
         function showScreen(num) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('screen' + num).classList.add('active');
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-bg');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            
+            // If we are on the special screen, make hearts more vibrant
+            if(document.body.classList.contains('special-bg-active')) {
+                heart.style.color = `hsl(${Math.random() * 360}, 100%, 75%)`;
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            }
+            
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+
+        // Floating Hearts global interval
+        heartInterval = setInterval(createHeart, 300);
+
+        function openSpecialPage() {
+            document.body.classList.add('special-bg-active');
+            // Speed up hearts for the final page
+            clearInterval(heartInterval);
+            heartInterval = setInterval(createHeart, 150); 
+            
+            if (audio.paused) {
+                audio.play();
+                record.classList.add('playing');
+                if(playBtn) playBtn.innerText = "PAUSE SONG ⏸️";
+            }
+            showScreen(9);
+        }
+
+        function closeSpecialPage() {
+            document.body.classList.remove('special-bg-active');
+            clearInterval(heartInterval);
+            heartInterval = setInterval(createHeart, 300); // Back to normal speed
+            showScreen(8);
         }
 
         function goToGifts() {
@@ -259,18 +334,7 @@
             }
         }
 
-        // Floating Hearts
-        setInterval(() => {
-            const heart = document.createElement('div');
-            heart.classList.add('heart-bg');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 5000);
-        }, 300);
-
-        // Countdown Timer: Jan 1, 2026 IST
+        // Countdown Timer
         const target = new Date("2026-01-01T00:00:00+05:30").getTime();
         setInterval(() => {
             const now = new Date().getTime();
