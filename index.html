@@ -137,7 +137,6 @@
         }
         video { width: 100%; display: block; }
 
-        /* Animation for the Thank You Pop-up */
         .thank-you-note {
             background: white;
             padding: 20px;
@@ -174,7 +173,7 @@
 </head>
 <body>
 
-    <audio id="mySong" loop>
+    <audio id="mySong" loop preload="auto">
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
@@ -299,22 +298,20 @@
             document.getElementById('screen' + num).classList.add('active');
             container.scrollTop = 0;
             
-            // Reset the thank you note if leaving screen 10
             if (num !== 10) {
                 thanksNote.classList.remove('pop-up');
                 noteTriggered = false;
             }
         }
 
-        // Detect scroll to trigger thank you animation
+        // SCROLL TRIGGER FOR THANK YOU
         container.onscroll = function() {
             const trigger = document.getElementById('triggerPoint');
             if (document.getElementById('screen10').classList.contains('active') && !noteTriggered) {
                 const rect = trigger.getBoundingClientRect();
-                if (rect.top < window.innerHeight) {
+                if (rect.top < window.innerHeight - 100) {
                     thanksNote.classList.add('pop-up');
                     noteTriggered = true;
-                    // Explosion of confetti when the note appears
                     confetti({
                         particleCount: 150,
                         spread: 70,
@@ -325,6 +322,7 @@
             }
         };
 
+        // EXPLICIT STOP FUNCTION
         function stopMusic() {
             audio.pause();
             audio.currentTime = 0; 
@@ -351,22 +349,23 @@
             document.body.classList.add('special-bg-active');
             clearInterval(heartInterval);
             heartInterval = setInterval(createHeart, 150); 
-            audio.play();
+            
+            audio.play().catch(e => console.log("Playback failed:", e));
             record.classList.add('playing');
             if(playBtn) playBtn.innerText = "PAUSE SONG ⏸️";
             showScreen(9);
         }
 
         function closeSpecialPage() {
+            stopMusic(); // STOP MUSIC ON BACK
             document.body.classList.remove('special-bg-active');
             clearInterval(heartInterval);
             heartInterval = setInterval(createHeart, 300);
-            stopMusic();
             showScreen(8);
         }
 
         function openVideoGallery() {
-            stopMusic(); 
+            stopMusic(); // STOP MUSIC ON GIFT CLICK
             showScreen(10);
         }
 
@@ -416,6 +415,7 @@
             }
         }
 
+        // Countdown Timer
         const target = new Date("2026-01-01T00:00:00+05:30").getTime();
         setInterval(() => {
             const now = new Date().getTime();
