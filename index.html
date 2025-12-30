@@ -66,7 +66,7 @@
             border: 3px solid white;
             text-align: center;
             position: relative;
-            max-height: 90vh;
+            max-height: 92vh; /* Increased slightly for better scrolling */
             overflow-y: auto;
             scroll-behavior: smooth;
         }
@@ -280,7 +280,8 @@
             <h2 style="color: var(--pink-dark);">All The Edits of my sweet girl</h2>
             <div class="video-container"><video controls><source src="video1.mp4" type="video/mp4"></video></div>
             <div class="video-container"><video controls><source src="video2.mp4" type="video/mp4"></video></div>
-            <div class="video-container" id="triggerPoint"><video controls><source src="video3.mp4" type="video/mp4"></video></div>
+            <div class="video-container"><video controls><source src="video3.mp4" type="video/mp4"></video></div>
+            <div class="video-container" id="triggerPoint"><video controls><source src="video4.mp4" type="video/mp4"></video></div>
 
             <div class="thank-you-note" id="thanksNote">
                 <div class="heart-beat" style="font-size: 30px;">❤️</div><br>
@@ -323,6 +324,7 @@
             const trigger = document.getElementById('triggerPoint');
             if (document.getElementById('screen10').classList.contains('active') && !noteTriggered) {
                 const rect = trigger.getBoundingClientRect();
+                // Check if the fourth video is in view to pop up the thank you note
                 if (rect.top < window.innerHeight - 100) {
                     thanksNote.classList.add('pop-up');
                     noteTriggered = true;
@@ -376,13 +378,13 @@
         function openVideoGallery() { stopMusic(); showScreen(10); }
 
         function openLetterPage() {
-            stopMusic(); // Ensure main song is off
+            stopMusic(); 
             showScreen(11);
-            letterAudio.play().catch(e => console.log(e)); // Play MUSIC2.MP3
+            letterAudio.play().catch(e => console.log(e)); 
         }
 
         function closeLetterPage() {
-            stopLetterMusic(); // Stop MUSIC2.MP3
+            stopLetterMusic();
             showScreen(10);
         }
 
