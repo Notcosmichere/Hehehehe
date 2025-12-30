@@ -28,7 +28,6 @@
             transition: background 0.8s ease;
         }
 
-        /* Animated Background for Special Screen */
         .special-bg-active {
             background: linear-gradient(45deg, #ff85a2, #7b2cbf, #ff4d6d, #222);
             background-size: 400% 400%;
@@ -67,6 +66,8 @@
             border: 3px solid white;
             text-align: center;
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; }
@@ -118,6 +119,22 @@
         .gift-box { background: white; padding: 25px; border-radius: 20px; cursor: pointer; font-size: 2.5rem; border: 2px solid var(--pink-light); transition: 0.3s; }
         .gift-box:hover { background: var(--pink-light); transform: translateY(-5px); }
         
+        .small-gift {
+            font-size: 1.5rem;
+            padding: 15px;
+            margin: 10px auto;
+            width: fit-content;
+        }
+
+        .video-container {
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--pink-med);
+        }
+        video { width: 100%; display: block; }
+
         #lastSurpriseBtn {
             background: #ff0054;
             display: none; 
@@ -219,9 +236,29 @@
 
         <div id="screen9" class="screen">
             <h2 class="wiggle" style="color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.5);">My Whole Heart...</h2>
-            <img src="special.jpg" class="cat-img" style="width: 100%; max-height: 280px; object-fit: contain; border: 5px solid white; box-shadow: 0 0 20px white;">
-            <p style="font-style: italic; color: white; font-weight: bold; font-size: 1.2rem;">"I just wanna be yours."</p>
+            <img src="special.jpg" class="cat-img" style="width: 100%; max-height: 240px; object-fit: contain; border: 5px solid white; box-shadow: 0 0 20px white;">
+            
+            <p style="color: white; font-weight: bold; margin-bottom: 5px;">click thiss</p>
+            <div class="gift-box small-gift" onclick="showScreen(10)">🎁</div>
+            
+            <p style="font-style: italic; color: white; font-weight: bold; font-size: 1.2rem; margin-top: 10px;">"I just wanna be yours."</p>
             <button onclick="closeSpecialPage()" style="background:rgba(255,255,255,0.8); color: var(--purple-special);">BACK</button>
+        </div>
+
+        <div id="screen10" class="screen">
+            <h2 style="color: var(--pink-dark);">All The Edits of my sweet girl</h2>
+            
+            <div class="video-container">
+                <video controls><source src="video1.mp4" type="video/mp4"></video>
+            </div>
+            <div class="video-container">
+                <video controls><source src="video2.mp4" type="video/mp4"></video>
+            </div>
+            <div class="video-container">
+                <video controls><source src="video3.mp4" type="video/mp4"></video>
+            </div>
+
+            <button onclick="showScreen(9)" style="background: var(--pink-dark);">BACK TO SPECIAL ✨</button>
         </div>
     </div>
 
@@ -236,6 +273,8 @@
         function showScreen(num) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('screen' + num).classList.add('active');
+            // Reset scroll position for screens with many videos
+            document.querySelector('.container').scrollTop = 0;
         }
 
         function createHeart() {
@@ -244,7 +283,6 @@
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
             
-            // If we are on the special screen, make hearts more vibrant
             if(document.body.classList.contains('special-bg-active')) {
                 heart.style.color = `hsl(${Math.random() * 360}, 100%, 75%)`;
                 heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
@@ -255,12 +293,10 @@
             setTimeout(() => heart.remove(), 5000);
         }
 
-        // Floating Hearts global interval
         heartInterval = setInterval(createHeart, 300);
 
         function openSpecialPage() {
             document.body.classList.add('special-bg-active');
-            // Speed up hearts for the final page
             clearInterval(heartInterval);
             heartInterval = setInterval(createHeart, 150); 
             
@@ -275,7 +311,7 @@
         function closeSpecialPage() {
             document.body.classList.remove('special-bg-active');
             clearInterval(heartInterval);
-            heartInterval = setInterval(createHeart, 300); // Back to normal speed
+            heartInterval = setInterval(createHeart, 300);
             showScreen(8);
         }
 
@@ -334,7 +370,6 @@
             }
         }
 
-        // Countdown Timer
         const target = new Date("2026-01-01T00:00:00+05:30").getTime();
         setInterval(() => {
             const now = new Date().getTime();
