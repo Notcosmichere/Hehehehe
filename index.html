@@ -156,6 +156,18 @@
             transform: scale(1);
         }
 
+        .letter-content {
+            background: #fffafa;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            text-align: left;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            border-left: 5px solid var(--pink-dark);
+            position: relative;
+        }
+
         #lastSurpriseBtn {
             background: #ff0054;
             display: none; 
@@ -163,12 +175,8 @@
             animation: beat 0.8s infinite alternate;
         }
 
-        .special-btn {
-            background: var(--purple-special);
-            font-size: 0.85rem;
-            padding: 8px 20px;
-            margin-top: 5px;
-        }
+        .special-btn { background: var(--purple-special); font-size: 0.85rem; padding: 8px 20px; margin-top: 5px; }
+        .letter-btn { background: var(--pink-dark); margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -258,17 +266,14 @@
         <div id="screen9" class="screen">
             <h2 class="wiggle" style="color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.5);">My Whole Heart...</h2>
             <img src="special.jpg" class="cat-img" style="width: 100%; max-height: 240px; object-fit: contain; border: 5px solid white; box-shadow: 0 0 20px white;">
-            
             <p style="color: white; font-weight: bold; margin-bottom: 5px;">click thiss</p>
             <div class="gift-box small-gift" onclick="openVideoGallery()">🎁</div>
-            
             <p style="font-style: italic; color: white; font-weight: bold; font-size: 1.2rem; margin-top: 10px;">"I just wanna be yours."</p>
             <button onclick="closeSpecialPage()" style="background:rgba(255,255,255,0.8); color: var(--purple-special);">BACK</button>
         </div>
 
         <div id="screen10" class="screen">
             <h2 style="color: var(--pink-dark);">All The Edits of my sweet girl</h2>
-            
             <div class="video-container"><video controls><source src="video1.mp4" type="video/mp4"></video></div>
             <div class="video-container"><video controls><source src="video2.mp4" type="video/mp4"></video></div>
             <div class="video-container" id="triggerPoint"><video controls><source src="video3.mp4" type="video/mp4"></video></div>
@@ -278,7 +283,16 @@
                 Thank You For being in My life I love you so much i appreciate you so much enik ni iland patiladi I'm all yours
             </div>
 
+            <button class="letter-btn" onclick="openLetterPage()">special letter ✉️</button>
             <button onclick="showScreen(9); openSpecialPage();" style="background: var(--pink-dark); margin-top: 20px;">BACK TO SPECIAL ✨</button>
+        </div>
+
+        <div id="screen11" class="screen">
+            <h2 class="wiggle">My Secret Letter ✉️</h2>
+            <div class="letter-content">
+                Kuripe Hehe Ninne kandapo ente killi poyi aa oru timele excitement ilu njn frndl vannu nokitha enik ni mathre ollu enik ninne vayankara ishta idk AAHHH kurupe enik ninne ethre ishta ariyo ni kayinje enik aru ollu you are my first priority hehe and bby enik ninne onnude kananmm ☹️ miss you so much enik ninne ketipidikanam aa njn wait akam keta ente sonthm ahn ni I love you mwah
+            </div>
+            <button onclick="closeLetterPage()" style="margin-top:25px;">CLOSE LETTER ❤️</button>
         </div>
     </div>
 
@@ -297,14 +311,9 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('screen' + num).classList.add('active');
             container.scrollTop = 0;
-            
-            if (num !== 10) {
-                thanksNote.classList.remove('pop-up');
-                noteTriggered = false;
-            }
+            if (num !== 10) { thanksNote.classList.remove('pop-up'); noteTriggered = false; }
         }
 
-        // SCROLL TRIGGER FOR THANK YOU
         container.onscroll = function() {
             const trigger = document.getElementById('triggerPoint');
             if (document.getElementById('screen10').classList.contains('active') && !noteTriggered) {
@@ -312,17 +321,11 @@
                 if (rect.top < window.innerHeight - 100) {
                     thanksNote.classList.add('pop-up');
                     noteTriggered = true;
-                    confetti({
-                        particleCount: 150,
-                        spread: 70,
-                        origin: { y: 0.6 },
-                        colors: ['#ff85a2', '#ff4d6d', '#7b2cbf']
-                    });
+                    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ff85a2', '#ff4d6d', '#7b2cbf'] });
                 }
             }
         };
 
-        // EXPLICIT STOP FUNCTION
         function stopMusic() {
             audio.pause();
             audio.currentTime = 0; 
@@ -335,62 +338,52 @@
             heart.classList.add('heart-bg');
             heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
-            if(document.body.classList.contains('special-bg-active')) {
-                heart.style.color = `hsl(${Math.random() * 360}, 100%, 75%)`;
-            }
+            if(document.body.classList.contains('special-bg-active')) { heart.style.color = `hsl(${Math.random() * 360}, 100%, 75%)`; }
             heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 5000);
         }
-
         heartInterval = setInterval(createHeart, 300);
 
         function openSpecialPage() {
             document.body.classList.add('special-bg-active');
             clearInterval(heartInterval);
             heartInterval = setInterval(createHeart, 150); 
-            
-            audio.play().catch(e => console.log("Playback failed:", e));
+            audio.play().catch(e => console.log(e));
             record.classList.add('playing');
             if(playBtn) playBtn.innerText = "PAUSE SONG ⏸️";
             showScreen(9);
         }
 
         function closeSpecialPage() {
-            stopMusic(); // STOP MUSIC ON BACK
+            stopMusic();
             document.body.classList.remove('special-bg-active');
             clearInterval(heartInterval);
             heartInterval = setInterval(createHeart, 300);
             showScreen(8);
         }
 
-        function openVideoGallery() {
-            stopMusic(); // STOP MUSIC ON GIFT CLICK
+        function openVideoGallery() { stopMusic(); showScreen(10); }
+
+        function openLetterPage() {
+            showScreen(11);
+            audio.play().catch(e => console.log(e)); // Play song when entering letter
+        }
+
+        function closeLetterPage() {
+            stopMusic(); // Stop song when closing letter
             showScreen(10);
         }
 
-        function goToGifts() {
-            checkConditions(); 
-            showScreen(5);
-        }
-
+        function goToGifts() { checkConditions(); showScreen(5); }
         function showGiftPage(imgSrc, message, id) {
             document.getElementById('gift-image-display').src = imgSrc;
             document.getElementById('gift-message').innerText = message;
             if(id) interactions[id] = true;
             showScreen(6);
         }
-
-        function showMusicPage() {
-            interactions.music = true;
-            showScreen(7);
-        }
-
-        function checkConditions() {
-            if (interactions.hug && interactions.flowers && interactions.memories && interactions.music) {
-                document.getElementById('lastSurpriseBtn').style.display = 'block';
-            }
-        }
+        function showMusicPage() { interactions.music = true; showScreen(7); }
+        function checkConditions() { if (interactions.hug && interactions.flowers && interactions.memories && interactions.music) { document.getElementById('lastSurpriseBtn').style.display = 'block'; } }
 
         function openFinalSurprise() {
             showScreen(8);
@@ -404,31 +397,17 @@
         }
 
         function toggleMusic() {
-            if (audio.paused) {
-                audio.play();
-                record.classList.add('playing');
-                playBtn.innerText = "PAUSE SONG ⏸️";
-            } else {
-                audio.pause();
-                record.classList.remove('playing');
-                playBtn.innerText = "PLAY SONG 🎧";
-            }
+            if (audio.paused) { audio.play(); record.classList.add('playing'); playBtn.innerText = "PAUSE SONG ⏸️"; }
+            else { audio.pause(); record.classList.remove('playing'); playBtn.innerText = "PLAY SONG 🎧"; }
         }
 
-        // Countdown Timer
         const target = new Date("2026-01-01T00:00:00+05:30").getTime();
         setInterval(() => {
             const now = new Date().getTime();
             const diff = target - now;
             const timerEl = document.getElementById("timer");
-            if (diff <= 0) {
-                if (timerEl) timerEl.innerHTML = "HAPPY NEW YEAR! 🎉";
-                return;
-            }
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            if (diff <= 0) { if (timerEl) timerEl.innerHTML = "HAPPY NEW YEAR! 🎉"; return; }
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24)), h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)), m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)), s = Math.floor((diff % (1000 * 60)) / 1000);
             if (timerEl) timerEl.innerHTML = `${d}d : ${h}h : ${m}m : ${s}s`;
         }, 1000);
     </script>
