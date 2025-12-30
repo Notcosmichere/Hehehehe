@@ -185,6 +185,10 @@
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
+    <audio id="letterSong" loop preload="auto">
+        <source src="music2.mp3" type="audio/mpeg">
+    </audio>
+
     <div class="container" id="mainContainer">
         <div id="screen0" class="screen active">
             <img src="welcome.jpg" class="cat-img">
@@ -298,6 +302,7 @@
 
     <script>
         const audio = document.getElementById('mySong');
+        const letterAudio = document.getElementById('letterSong');
         const record = document.getElementById('recordDiv');
         const playBtn = document.getElementById('playBtn');
         const container = document.getElementById('mainContainer');
@@ -329,8 +334,13 @@
         function stopMusic() {
             audio.pause();
             audio.currentTime = 0; 
-            record.classList.remove('playing');
+            if(record) record.classList.remove('playing');
             if(playBtn) playBtn.innerText = "PLAY SONG 🎧";
+        }
+
+        function stopLetterMusic() {
+            letterAudio.pause();
+            letterAudio.currentTime = 0;
         }
 
         function createHeart() {
@@ -350,7 +360,7 @@
             clearInterval(heartInterval);
             heartInterval = setInterval(createHeart, 150); 
             audio.play().catch(e => console.log(e));
-            record.classList.add('playing');
+            if(record) record.classList.add('playing');
             if(playBtn) playBtn.innerText = "PAUSE SONG ⏸️";
             showScreen(9);
         }
@@ -366,12 +376,13 @@
         function openVideoGallery() { stopMusic(); showScreen(10); }
 
         function openLetterPage() {
+            stopMusic(); // Ensure main song is off
             showScreen(11);
-            audio.play().catch(e => console.log(e)); // Play song when entering letter
+            letterAudio.play().catch(e => console.log(e)); // Play MUSIC2.MP3
         }
 
         function closeLetterPage() {
-            stopMusic(); // Stop song when closing letter
+            stopLetterMusic(); // Stop MUSIC2.MP3
             showScreen(10);
         }
 
@@ -397,8 +408,8 @@
         }
 
         function toggleMusic() {
-            if (audio.paused) { audio.play(); record.classList.add('playing'); playBtn.innerText = "PAUSE SONG ⏸️"; }
-            else { audio.pause(); record.classList.remove('playing'); playBtn.innerText = "PLAY SONG 🎧"; }
+            if (audio.paused) { audio.play(); if(record) record.classList.add('playing'); playBtn.innerText = "PAUSE SONG ⏸️"; }
+            else { audio.pause(); if(record) record.classList.remove('playing'); playBtn.innerText = "PLAY SONG 🎧"; }
         }
 
         const target = new Date("2026-01-01T00:00:00+05:30").getTime();
