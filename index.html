@@ -66,7 +66,7 @@
             border: 3px solid white;
             text-align: center;
             position: relative;
-            max-height: 92vh; /* Increased slightly for better scrolling */
+            max-height: 92vh;
             overflow-y: auto;
             scroll-behavior: smooth;
         }
@@ -115,6 +115,19 @@
         button:hover { background: var(--pink-dark); transform: scale(1.05); }
 
         .cat-img { width: 200px; height: 200px; object-fit: cover; border-radius: 20px; margin-bottom: 15px; }
+        
+        /* Centering and Glowing effect for the baby picture */
+        .baby-glow {
+            display: block;
+            margin: 0 auto 15px auto;
+            border: 3px solid white;
+            animation: glowPulse 2s infinite alternate;
+        }
+
+        @keyframes glowPulse {
+            from { box-shadow: 0 0 10px #ff85a2, 0 0 20px #ff85a2; }
+            to { box-shadow: 0 0 25px #ff4d6d, 0 0 40px #ff4d6d; }
+        }
 
         .gift-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; margin-top: 15px; }
         .gift-box { background: white; padding: 25px; border-radius: 20px; cursor: pointer; font-size: 2.5rem; border: 2px solid var(--pink-light); transition: 0.3s; }
@@ -219,7 +232,7 @@
         </div>
 
         <div id="screen4" class="screen">
-            <div class="heart-beat">❤️</div>
+            <img src="baby.jpg" class="cat-img baby-glow" alt="My Baby">
             <p style="font-size: 1.1rem; padding: 10px; line-height: 1.5;">
                 "njn Enthenkilum okke paranjitondenki sowry enik ni mathre ollu ninne mathram mathi, I'm always yours."
             </p>
@@ -324,7 +337,6 @@
             const trigger = document.getElementById('triggerPoint');
             if (document.getElementById('screen10').classList.contains('active') && !noteTriggered) {
                 const rect = trigger.getBoundingClientRect();
-                // Check if the fourth video is in view to pop up the thank you note
                 if (rect.top < window.innerHeight - 100) {
                     thanksNote.classList.add('pop-up');
                     noteTriggered = true;
